@@ -22,15 +22,15 @@ class List {
             // TODO
             Node<T> *ptr = this->head;
 
-            while(ptr) {
-                if(ptr->data == search)
-                    break;
-
+            while(!cmp(ptr->data, search) {
                 ptr = ptr->next;
+                
+                if(ptr == nullptr)
+                    break;
             }
 
-            pointer = &ptr;
-            return ptr != nullptr;
+            pointer = &(ptr->prev);
+            return ptr->prev->data == data;
         }
              
         bool insert(T data) {
@@ -39,19 +39,14 @@ class List {
             if(find(data, ptr))
                 return;
             
-            ptr = &head;
-
             Node<T> *temp = new Node<T>;
             temp->data = data;
-
-            while(!cmp((*ptr)->data, (*ptr)->next->data)) {
-                if((*ptr)->next == nullptr)
-                    break;
-
-                ptr = &(*ptr)->next;
-            }
+            
             temp->prev = (*ptr);
             temp->next = (*ptr)->next;
+            
+            if ((*ptr)->next)
+                (*ptr)->next->prev = temp;
             (*ptr)->next = temp;
 
             this->nodes++;
