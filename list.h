@@ -3,6 +3,7 @@
 
 #include "node.h"
 #include <algorithm>
+#include <iostream>
 
 template <typename Tr>
 class List {     
@@ -13,71 +14,95 @@ class List {
     private:
         Node<T>* head;
         Operation cmp;
-        int nodes;
               
     public:
         List() : head(nullptr) {};
 
         bool find(T search, Node<T> **&pointer) {
             // TODO
-            Node<T> *ptr = this->head;
+            if (this->head == nullptr)
+                return false;
 
-            while(!cmp(ptr->data, search) {
-                ptr = ptr->next;
+            Node<T> *ptr = this->head;
+            
+            pointer = &(this->head);
+            
+            while(cmp(ptr->data, search)) {
+                if (ptr != this->head)
+                    pointer = &((*pointer)->next);
                 
-                if(ptr == nullptr)
-                    break;
+                ptr = ptr->next;
+                if (ptr == nullptr)
+                    return (*pointer)->data == search;
             }
 
-            pointer = &(ptr->prev);
-            return ptr->prev->data == data;
+            if (*pointer)
+                return (*pointer)->data == search;
+            else
+                return false;
         }
              
         bool insert(T data) {
             // TODO
             Node<T> **ptr;
+            
             if(find(data, ptr))
-                return;
-            
-            Node<T> *temp = new Node<T>;
-            temp->data = data;
-            
-            temp->prev = (*ptr);
-            temp->next = (*ptr)->next;
-            
-            if ((*ptr)->next)
-                (*ptr)->next->prev = temp;
+                return false;
+
+            Node<T> *temp = new Node<T>(data);
+
+            if (this->head == nullptr) {
+                this->head = temp;
+                return true;
+            }
+
+            if (*ptr == nullptr) {
+                temp->next = this->head;
+                this->head = temp;
+                return true;
+            }
+
+            temp->next = (*ptr)->next;           
             (*ptr)->next = temp;
 
-            this->nodes++;
+            return true;
         }
              
         bool remove(T item) {
             // TODO
-
-            Node<T> **ptr, *ptr_1;
-            if(!find(data, ptr))
-                return;
+            Node<T> **ptr;
+            if(!find(item, ptr))
+                return false;
             
-            ptr_1 = &(*ptr)->prev;
-            ptr_1->next = &(*ptr)->next;
-            ptr_1 = &(*ptr)->next;
-            ptr_1->prev = &(*ptr)->prev;
+            if (*ptr == nullptr) {
+                ptr = &(this->head);
+                this->head = (*ptr)->next;
+                delete *ptr;
+                return true;
+            }
+            
+            Node<T> *ptr_1 = (*ptr);
+            *ptr = (*ptr)->next;
 
-            delete *ptr;
-            this->nodes--;
+            delete ptr_1;
+            return true;
         }  
              
         int size() {
             // TODO
-            return this->nodes;
+            int count = 0;
+            
+            for (Node<T> *ptr = this->head; ptr != nullptr; ptr = ptr->next) {
+                count++;
+            }
+            return count;
         }
 
         T operator[](int index) {
-            // TODO
+            // TODO            
             Node<T> *ptr = this->head;
-
-            while(ptr && index--) {
+            
+            while(index--) {
                 ptr = ptr->next;
             }
 
@@ -86,6 +111,7 @@ class List {
 
         ~List() {
             // TODO
+            this->head->killSelf();
         }         
 };
 
