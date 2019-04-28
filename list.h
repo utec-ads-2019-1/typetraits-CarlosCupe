@@ -27,7 +27,9 @@ class List {
             
             pointer = &(this->head);
             
+            // El bucle no es necesario de manejar de esta manera
             while(cmp(ptr->data, search)) {
+                // Para qué sirve este if?
                 if (ptr != this->head)
                     pointer = &((*pointer)->next);
                 
@@ -36,6 +38,7 @@ class List {
                     return (*pointer)->data == search;
             }
 
+            // Aquí estás agregando código de más
             if (*pointer)
                 return (*pointer)->data == search;
             else
@@ -51,6 +54,7 @@ class List {
 
             Node<T> *temp = new Node<T>(data);
 
+            // El código abajo debería poder simplificarse bastante
             if (this->head == nullptr) {
                 this->head = temp;
                 return true;
@@ -74,6 +78,7 @@ class List {
             if(!find(item, ptr))
                 return false;
             
+            // Lo mismo que el insert
             if (*ptr == nullptr) {
                 ptr = &(this->head);
                 this->head = (*ptr)->next;
