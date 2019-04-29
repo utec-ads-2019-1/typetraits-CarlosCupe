@@ -115,7 +115,7 @@ class List {
         }
 
         ~List() {
-            // TODO
+            // Falta controlar cuando head es null cuando la lista esta vacía
             this->head->killSelf();
         }         
 };
